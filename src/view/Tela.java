@@ -4,6 +4,7 @@ import DAO.Fabrica;
 import controller.CtrlCadastro;
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.swing.Action;
 import javax.swing.table.DefaultTableModel;
 
 public class Tela extends javax.swing.JFrame {
@@ -34,6 +35,7 @@ public class Tela extends javax.swing.JFrame {
         bCarregar = new javax.swing.JButton();
         bUpdate = new javax.swing.JButton();
         bRollback = new javax.swing.JButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -45,13 +47,24 @@ public class Tela extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Descrição", "Ativo"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTable1MousePressed(evt);
             }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         jComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nenhum", "Read Uncommited", "Read Commited", "Repetable Read", "Serializable" }));
 
@@ -87,6 +100,8 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
+        jCheckBox1.setText("Ativo?");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -102,23 +117,26 @@ public class Tela extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(bCarregar)
                             .addComponent(jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(jLabel4)
-                                .addGap(213, 213, 213))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jTDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(48, 48, 48)
+                                .addComponent(jCheckBox1)
+                                .addGap(116, 116, 116))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(12, 12, 12)
-                                        .addComponent(bUpdate)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(bRollback)
-                                    .addComponent(bCommit))
-                                .addGap(18, 18, 18))))))
+                                        .addGap(54, 54, 54)
+                                        .addComponent(bUpdate)
+                                        .addGap(32, 32, 32)
+                                        .addComponent(bCommit)
+                                        .addGap(26, 26, 26)
+                                        .addComponent(bRollback))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(104, 104, 104)
+                                        .addComponent(jLabel4)))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,12 +151,13 @@ public class Tela extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bCommit))
+                    .addComponent(jCheckBox1))
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bCarregar)
                     .addComponent(bUpdate)
-                    .addComponent(bRollback))
+                    .addComponent(bRollback)
+                    .addComponent(bCommit))
                 .addGap(54, 54, 54))
         );
 
@@ -204,7 +223,7 @@ public class Tela extends javax.swing.JFrame {
         
         dados[0] = (String) jTable1.getValueAt(iLinha, 0);
         dados[1] = jTDescricao.getText();
-        dados[2] = (String) jTable1.getValueAt(iLinha, 2);
+        dados[2] = String.valueOf(jCheckBox1.isSelected());
         
         CtrlCadastro.inserir(dados, conexao);
         
@@ -212,7 +231,16 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_bUpdateActionPerformed
 
     private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
+        
         jTDescricao.setText((String) jTable1.getValueAt(jTable1.getSelectedRow(), 1));
+        String checkbox = (String) jTable1.getValueAt(jTable1.getSelectedRow(), 2);
+        if ("true".equals(checkbox))
+            jCheckBox1.setSelected(true);
+        else
+            jCheckBox1.setSelected(false);
+        System.out.println("TESTE: " + checkbox);    
+        //if(!checkbox) ? jCheckBox1.isSelected(false) : jCheckBox1.isSelected(true);
+         
     }//GEN-LAST:event_jTable1MousePressed
 
     private void CarregarTabela(){
@@ -225,6 +253,7 @@ public class Tela extends javax.swing.JFrame {
         for (String[] dado : lista) {
             model.addRow(dado);
         }
+        
     }
     
     /**
@@ -267,6 +296,7 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JButton bCommit;
     private javax.swing.JButton bRollback;
     private javax.swing.JButton bUpdate;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox jComboBox;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -155,8 +155,6 @@ public class DAOcadastro {
     
      public static ArrayList<Cadastro> recuperarTodos(Connection conexao) {
 
-        //Connection conexao = Fabrica.getConexaoNOVA();
-
         String sql = "SELECT codigo, descricao, ativo FROM TBL_CADASTRO";
         Cadastro obj = null;
         ArrayList<Cadastro> lista = new ArrayList<>();
@@ -167,7 +165,7 @@ public class DAOcadastro {
 
             ResultSet objResultSet = ST.executeQuery();
 
-            while (objResultSet.next()) {
+            while(objResultSet.next()) {
 
                 obj = new Cadastro();
                 obj.setCodigo(objResultSet.getInt("codigo"));
@@ -203,7 +201,7 @@ public class DAOcadastro {
         return true;
     }
     
-    
+    /*
     public static void transacaoChupaCabra() throws SQLException{
         Connection cnx = Fabrica.getConexaoNOVA();
         try {
@@ -228,5 +226,5 @@ public class DAOcadastro {
             cnx.rollback();
             System.out.println("A transação chupa cabra deu ruim!\n" + ex.getMessage());            
         }
-    }    
+    }*/    
 }

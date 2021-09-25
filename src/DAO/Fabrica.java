@@ -37,6 +37,8 @@ public class Fabrica {
         }
         return conexaoSINGLETON;
     }
+    
+    /*
     public static Connection getConexaoNOVA() {
         Connection conexao = null;
         try {
@@ -48,7 +50,7 @@ public class Fabrica {
         }
         return conexao;
     }
-    
+    */
     public static Connection getConexaoNOVA(int isolamento) {
         Connection conexao = null;
         try {

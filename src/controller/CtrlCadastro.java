@@ -84,11 +84,12 @@ public class CtrlCadastro {
         return DAOcadastro.verificar(codigo); 
     }
     
+    /*
     public static void chamarChupaCabra(){
         try {
             DAOcadastro.transacaoChupaCabra();
         } catch (SQLException ex) {
             Logger.getLogger(CtrlCadastro.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
 }
