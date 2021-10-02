@@ -2,10 +2,7 @@ package controller;
 
 import DAO.DAOcadastro;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Cadastro;
 
 public class CtrlCadastro {
@@ -40,9 +37,9 @@ public class CtrlCadastro {
             obj.setAtivo(Boolean.parseBoolean(dados[2]));
 
             if (!verifica(obj.getCodigo())){
-                DAO.DAOcadastro.insert(obj);
+                DAO.DAOcadastro.insert(obj, conexao);
             } else {
-                DAO.DAOcadastro.update(obj);
+                DAO.DAOcadastro.update(obj, conexao);
             }
              
         } catch (Exception f) {

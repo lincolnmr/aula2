@@ -36,35 +36,29 @@ public class Tela extends javax.swing.JFrame {
         bUpdate = new javax.swing.JButton();
         bRollback = new javax.swing.JButton();
         jCheckBox1 = new javax.swing.JCheckBox();
+        jBAbrir = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Codigo", "Descrição", "Ativo"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                true, true, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTable1MousePressed(evt);
             }
         });
         jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-        }
 
         jComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nenhum", "Read Uncommited", "Read Commited", "Repetable Read", "Serializable" }));
 
@@ -79,7 +73,7 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
-        bCarregar.setText("Carregar");
+        bCarregar.setText("Carregar Tabela");
         bCarregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bCarregarActionPerformed(evt);
@@ -102,6 +96,13 @@ public class Tela extends javax.swing.JFrame {
 
         jCheckBox1.setText("Ativo?");
 
+        jBAbrir.setText("Abrir Isolamento");
+        jBAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBAbrirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -110,55 +111,62 @@ public class Tela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jBAbrir, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bCarregar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(bCarregar)
-                            .addComponent(jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(48, 48, 48)
-                                .addComponent(jCheckBox1)
-                                .addGap(116, 116, 116))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(bUpdate)
+                                .addGap(65, 65, 65)
+                                .addComponent(bCommit)
+                                .addGap(53, 53, 53)
+                                .addComponent(bRollback)
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(54, 54, 54)
-                                        .addComponent(bUpdate)
-                                        .addGap(32, 32, 32)
-                                        .addComponent(bCommit)
-                                        .addGap(26, 26, 26)
-                                        .addComponent(bRollback))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(104, 104, 104)
-                                        .addComponent(jLabel4)))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                        .addGap(28, 28, 28)
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jTDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(48, 48, 48)
+                                        .addComponent(jCheckBox1)))
+                                .addGap(70, 70, 70))))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(7, 7, 7)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox1))
-                .addGap(31, 31, 31)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addGap(8, 8, 8)
+                        .addComponent(jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addGap(7, 7, 7)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCheckBox1))))
+                .addGap(14, 14, 14)
+                .addComponent(jBAbrir)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bCarregar)
                     .addComponent(bUpdate)
-                    .addComponent(bRollback)
-                    .addComponent(bCommit))
-                .addGap(54, 54, 54))
+                    .addComponent(bCommit)
+                    .addComponent(bRollback))
+                .addGap(39, 39, 39))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -179,25 +187,7 @@ public class Tela extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bCarregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCarregarActionPerformed
-        int iOpcao = jComboBox.getSelectedIndex();
-        
-        switch (iOpcao) {
-            case 1:
-              iOpcao = Connection.TRANSACTION_READ_UNCOMMITTED;
-              break;
-            case 2:
-              iOpcao = Connection.TRANSACTION_READ_COMMITTED;
-              break;
-            case 3:
-              iOpcao = Connection.TRANSACTION_REPEATABLE_READ;
-              break;
-            case 4:
-              iOpcao = Connection.TRANSACTION_SERIALIZABLE;
-              break;
-            default:
-              iOpcao = Connection.TRANSACTION_NONE;
-        }
-        conexao = Fabrica.getConexaoNOVA(iOpcao);
+       
         CarregarTabela();
     }//GEN-LAST:event_bCarregarActionPerformed
 
@@ -237,11 +227,47 @@ public class Tela extends javax.swing.JFrame {
         if ("true".equals(checkbox))
             jCheckBox1.setSelected(true);
         else
-            jCheckBox1.setSelected(false);
-        System.out.println("TESTE: " + checkbox);    
+            jCheckBox1.setSelected(false); 
         //if(!checkbox) ? jCheckBox1.isSelected(false) : jCheckBox1.isSelected(true);
          
     }//GEN-LAST:event_jTable1MousePressed
+
+    private void jBAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAbrirActionPerformed
+         int iOpcao = jComboBox.getSelectedIndex();
+        
+        switch (iOpcao) {
+            case 1:
+              iOpcao = Connection.TRANSACTION_READ_UNCOMMITTED;
+              break;
+            case 2:
+              iOpcao = Connection.TRANSACTION_READ_COMMITTED;
+              break;
+            case 3:
+              iOpcao = Connection.TRANSACTION_REPEATABLE_READ;
+              break;
+            case 4:
+              iOpcao = Connection.TRANSACTION_SERIALIZABLE;
+              break;
+            default:
+              iOpcao = Connection.TRANSACTION_NONE;
+               break;
+        }
+        
+        try {
+            conexao = Fabrica.getConexaoNOVA(iOpcao);
+        } catch (Exception e) {
+            System.out.println("Erro ao carregar conexão na tela" + e);
+        }
+        
+    }//GEN-LAST:event_jBAbrirActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        try {
+            conexao.close();
+        } catch (Exception e) {
+            System.out.println("Erro ao encerrar conexão na tela" + e);
+        }
+    }//GEN-LAST:event_formWindowClosed
 
     private void CarregarTabela(){
 
@@ -296,6 +322,7 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JButton bCommit;
     private javax.swing.JButton bRollback;
     private javax.swing.JButton bUpdate;
+    private javax.swing.JButton jBAbrir;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox jComboBox;
     private javax.swing.JLabel jLabel3;
